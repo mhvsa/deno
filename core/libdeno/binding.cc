@@ -403,15 +403,18 @@ void EvalContext(const v8::FunctionCallbackInfo<v8::Value>& args) {
     DCHECK(try_catch.HasCaught());
     auto exception = try_catch.Exception();
 
-    output->Set(0, v8::Null(isolate));
+    DCHECK(output->Set(context, 0, v8::Null(isolate)).FromJust());
 
     auto errinfo_obj = v8::Object::New(isolate);
-    errinfo_obj->Set(v8_str("isCompileError"), v8_bool(true));
-    errinfo_obj->Set(v8_str("isNativeError"),
-                     v8_bool(exception->IsNativeError()));
-    errinfo_obj->Set(v8_str("thrown"), exception);
+    DCHECK(errinfo_obj->Set(context, v8_str("isCompileError"), v8_bool(true))
+               .FromJust());
+    DCHECK(errinfo_obj
+               ->Set(context, v8_str("isNativeError"),
+                     v8_bool(exception->IsNativeError()))
+               .FromJust());
+    DCHECK(errinfo_obj->Set(context, v8_str("thrown"), exception).FromJust());
 
-    output->Set(1, errinfo_obj);
+    DCHECK(output->Set(context, 1, errinfo_obj).FromJust());
 
     args.GetReturnValue().Set(output);
     return;
@@ -423,22 +426,25 @@ void EvalContext(const v8::FunctionCallbackInfo<v8::Value>& args) {
     DCHECK(try_catch.HasCaught());
     auto exception = try_catch.Exception();
 
-    output->Set(0, v8::Null(isolate));
+    DCHECK(output->Set(context, 0, v8::Null(isolate)).FromJust());
 
     auto errinfo_obj = v8::Object::New(isolate);
-    errinfo_obj->Set(v8_str("isCompileError"), v8_bool(false));
-    errinfo_obj->Set(v8_str("isNativeError"),
-                     v8_bool(exception->IsNativeError()));
-    errinfo_obj->Set(v8_str("thrown"), exception);
+    DCHECK(errinfo_obj->Set(context, v8_str("isCompileError"), v8_bool(false))
+               .FromJust());
+    DCHECK(errinfo_obj
+               ->Set(context, v8_str("isNativeError"),
+                     v8_bool(exception->IsNativeError()))
+               .FromJust());
+    DCHECK(errinfo_obj->Set(context, v8_str("thrown"), exception).FromJust());
 
-    output->Set(1, errinfo_obj);
+    DCHECK(output->Set(context, 1, errinfo_obj).FromJust());
 
     args.GetReturnValue().Set(output);
     return;
   }
 
-  output->Set(0, result.ToLocalChecked());
-  output->Set(1, v8::Null(isolate));
+  DCHECK(output->Set(context, 0, result.ToLocalChecked()).FromJust());
+  DCHECK(output->Set(context, 1, v8::Null(isolate)).FromJust());
   args.GetReturnValue().Set(output);
 }
 

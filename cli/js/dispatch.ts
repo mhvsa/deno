@@ -63,6 +63,7 @@ export let OP_CWD: number;
 export let OP_FETCH_ASSET: number;
 export let OP_DIAL_TLS: number;
 export let OP_HOSTNAME: number;
+export let OP_ADD: number;
 
 export function asyncMsgFromRust(opId: number, ui8: Uint8Array): void {
   switch (opId) {

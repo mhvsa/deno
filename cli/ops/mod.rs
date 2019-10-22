@@ -22,3 +22,4 @@ pub mod resources;
 pub mod timers;
 pub mod tls;
 pub mod workers;
+pub mod add;
